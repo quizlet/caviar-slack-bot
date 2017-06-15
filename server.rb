@@ -6,14 +6,7 @@ require 'uri'
 require 'json'
 require File.expand_path('../lib/services/slack', __FILE__)
 
-account_sid = ENV['TWILIO_ACCOUNT_SID']
-auth_token = ENV['TWILIO_AUTH_TOKEN']
-
-@client = Twilio::REST::Client.new account_sid, auth_token
-
 class Server < Sinatra::Application
-
-  SIX_HOURS = 60 * 60 * 6
 
   helpers do
     def base_url
@@ -35,22 +28,25 @@ class Server < Sinatra::Application
   end
 
   post '/text' do
-    unless @from && (Time.now - @time) > SIX_HOURS
-      slack_client.alert("Sorry, I don't have the driver's number yet!") and return
-    end
+    to = params[:text].split.first
+    message = params[:text].split(' ').drop(1).join(' ')
 
-    @client.messages.create(
-      from: "+#{ENV['CAVIAR_PHONE_NUMBER']}",
-      to: @from,
-      body: params[:text]
+    puts "Attempting to respond to #{to} with \"#{message}\"."
+
+    account_sid = ENV['TWILIO_ACCOUNT_SID']
+    auth_token = ENV['TWILIO_AUTH_TOKEN']
+    @client = Twilio::REST::Client.new account_sid, auth_token
+    @client.account.messages.create(
+      from: "#{ENV['TWILIO_PHONE_NUMBER']}",
+      to: to,
+      body: message
     )
+
+    slack_client.message("Responded to #{to} with \"#{message}\".")
   end
 
   post '/sms' do
     puts "Received Twilio SMS: #{params.to_s}"
-
-    @from = params[:From]
-    @time = Time.now
 
     slack_client.alert("Message from Caviar driver: \"#{params[:Body]}\" - Respond to this text using `/caviar #{params[:From]} <MESSAGE>`.")
   end
@@ -61,9 +57,6 @@ class Server < Sinatra::Application
     response = Twilio::TwiML::Response.new { |r|
       r.Say "Hello, Caviar driver. I am an automated answering system, but someone will call you back at this number shortly. You can also send text messages to this phone number and someone will read them."
     }.text
-
-    @from = params[:From]
-    @time = Time.now
 
     slack_client.alert("The Caviar driver called the contact number. You can send them a text by using `/caviar #{params[:From]} <MESSAGE>`.")
 
