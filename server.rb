@@ -55,7 +55,7 @@ class Server < Sinatra::Application
     puts "Received Twilio Voice: #{params.to_s}"
 
     response = Twilio::TwiML::Response.new { |r|
-      r.Say "Hello, Caviar driver. I am an automated answering system, but someone will call you back at this number shortly. You can also send text messages to this phone number and someone will read them."
+      r.Say "Hello, Caviar driver. We have been notified of your call. We can also receive and respond to text messages to this phone number."
     }.text
 
     slack_client.alert("The Caviar driver called the contact number. You can send them a text by using `/caviar #{params[:From]} <MESSAGE>`.")
