@@ -24,9 +24,9 @@ Setup
 1. Text your Twilio number and make sure it posts to your Slack channel.
 1. Call your Twilio number and make sure it gives you a voice response and posts to your Slack channel.
 1. To set up responding to the number, add some Twilio account details:
-	-`heroku config:add TWILIO_PHONE_NUMBER=[YOUR_TWILIO_PHONE_NUMBER] -a [YOUR_HEROKU_APP_NAME]`
-	-`heroku config:add TWILIO_ACCOUNT_SID=[YOUR_TWILIO_ACCOUNT_SID] -a [YOUR_HEROKU_APP_NAME]`
-	-`heroku config:add TWILIO_AUTH_TOKEN=[YOUR_TWILIO_AUTH_TOKEN] -a [YOUR_HEROKU_APP_NAME]`
+	- `heroku config:add TWILIO_PHONE_NUMBER=[YOUR_TWILIO_PHONE_NUMBER] -a [YOUR_HEROKU_APP_NAME]`
+	- `heroku config:add TWILIO_ACCOUNT_SID=[YOUR_TWILIO_ACCOUNT_SID] -a [YOUR_HEROKU_APP_NAME]`
+	- `heroku config:add TWILIO_AUTH_TOKEN=[YOUR_TWILIO_AUTH_TOKEN] -a [YOUR_HEROKU_APP_NAME]`
 1. Upgrade your Twilio account and add some money to it to remove the trial messages.
 1. Make your Caviar contact number your Twilio phone number.
 1. Order food and wait for the bot to keep you up to date!
