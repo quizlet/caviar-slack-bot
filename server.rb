@@ -52,7 +52,7 @@ class Server < Sinatra::Application
     @from = params[:From]
     @time = Time.now
 
-    slack_client.alert("#{params[:Body]} - Respond to this text using @caviar.")
+    slack_client.alert("Message from Caviar driver: \"#{params[:Body]}\" - Respond to this text using `/caviar #{params[:From]} <MESSAGE>`.")
   end
 
   post '/voice' do
@@ -65,7 +65,7 @@ class Server < Sinatra::Application
     @from = params[:From]
     @time = Time.now
 
-    slack_client.alert("The Caviar driver called the contact number. Please return their call at #{@from}. You can also send them a text by using @caviar. Thanks!")
+    slack_client.alert("The Caviar driver called the contact number. You can send them a text by using `/caviar #{params[:From]} <MESSAGE>`.")
 
     response
   end
